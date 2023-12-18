@@ -22,7 +22,7 @@ class Game:
 
         self.assets = { # создаём shortcuts для разных типов тайлов
             'player': load_image('entities/player/player.png'),
-            'enemies': load_images('entities/enemies'),
+#           'enemies': load_images('entities/enemies'),
             'grass': load_images('grass'),
             'blocks': load_images('blocks'),
             'tree': load_images('tree'),
