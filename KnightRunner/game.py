@@ -4,6 +4,7 @@ from scripts.entities import EntityPhysx, Player
 from scripts.utilities import load_image, load_images, Animation
 from scripts.tilemap import Tilemap
 
+
 class Game: 
     def __init__(self): # метод-конструктор, где мы выполняем инициализационные шаги, базовые функции
         # self в скобочках будет ссылаться на объект, который будет создаваться на основе вышеуказанного класса.
@@ -82,6 +83,7 @@ class Game:
 
 
 Game().run()
+
 
 
 
