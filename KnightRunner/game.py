@@ -4,7 +4,6 @@ from scripts.entities import EntityPhysx, Player
 from scripts.utilities import load_image, load_images, Animation
 from scripts.tilemap import Tilemap
 
-# Далее идёт всё про принципам ООП
 class Game: 
     def __init__(self): # метод-конструктор, где мы выполняем инициализационные шаги, базовые функции
         # self в скобочках будет ссылаться на объект, который будет создаваться на основе вышеуказанного класса.
@@ -24,20 +23,21 @@ class Game:
         self.assets = { # создаём shortcuts для разных типов тайлов
             'player': load_image('entities/player/player.png'),
             'enemies': load_images('entities/enemies'),
-            'decor': load_images('decor'),
-            'terrain': load_images('terrain'),
+            'grass': load_images('grass'),
             'blocks': load_images('blocks'),
+            'tree': load_images('tree'),
             'misc': load_images('misc'),
             'background': load_image('background.png'),
-            'player/idle': Animation(load_images('entities/player/idle'), img_dur=6),
+            'player/idle': Animation(load_images('entities/player/idle'), img_dur=45),
             'player/run': Animation(load_images('entities/player/run'), img_dur=7),
             'player/jump': Animation(load_images('entities/player/jump')),
-            'player/climb': Animation(load_images('entities/player/climb'), img_dur=4),
+            'player/wall_slide': Animation(load_images('entities/player/wall_slide'), img_dur=12),
         } # в папке из load images должны быть только png с int-именами.
 
         self.movement = [False, False]
         self.player = Player(self, (50, 50), (15, 15))
         self.tilemap = Tilemap(self, tile_size=16)
+        self.tilemap.load('level1.json')
         self.scroll = [0, 0] # scroll будет относительно экрана, т.е. это реализует камеру
 
 
@@ -67,7 +67,7 @@ class Game:
                     if event.key == pg.K_RIGHT:
                         self.movement[1] = True
                     if event.key == pg.K_UP:  
-                        self.player.velocity[1] = -3 
+                        self.player.jump()
                         # сделали стартовую точку ускорению чтобы прыжок был плавным.
                 if event.type == pg.KEYUP: # Если какая-нить клавиша опущена
                     if event.key == pg.K_LEFT:
