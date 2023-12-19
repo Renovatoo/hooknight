@@ -85,6 +85,7 @@ class Player(EntityPhysx):
         self.air_time = 0
         self.jumps = 1
         self.wall_slide = False
+        self.striking = 0
 
 
     def update(self, tilemap, movement=(0, 0)):
@@ -118,6 +119,17 @@ class Player(EntityPhysx):
         else:
             self.velocity[0] = min(self.velocity[0] + 0.1, 0)
 
+        if self.striking > 0:
+            self.striking = max(0, self.striking - 1)
+        if self.striking < 0:
+            self.striking = min(0, self.striking + 1)
+        if abs(self.striking) > 58:
+            self.velocity[0] = abs(self.striking) / self.striking * 1.8
+                               # Это примет значение 1 или -1, т.е. просто даёт нам направление
+            if abs(self.striking) == 56:
+                self.velocity[0] *= 0.01 # Затормаживаемся после удара в движении
+              # Оставшиеся 56 кадров после удара у нас служат в качестве отката удара
+    
 
     def jump(self):
         if self.wall_slide:
@@ -137,3 +149,10 @@ class Player(EntityPhysx):
             self.jumps -= 1
             self.air_time = 5
 
+
+    def strike(self):
+        if not self.striking:
+            if self.flip:
+                self.striking = -60
+            else:
+                self.striking = 60

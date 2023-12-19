@@ -1,1 +1,0 @@
-, (self.movement[1

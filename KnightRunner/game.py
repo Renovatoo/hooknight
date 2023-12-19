@@ -22,7 +22,7 @@ class Game:
 
         self.assets = { # создаём shortcuts для разных типов тайлов
             'player': load_image('entities/player/player.png'),
-#           'enemies': load_images('entities/enemies'),
+            'enemies': load_images('entities/enemies'),
             'grass': load_images('grass'),
             'blocks': load_images('blocks'),
             'tree': load_images('tree'),
@@ -32,6 +32,7 @@ class Game:
             'player/run': Animation(load_images('entities/player/run'), img_dur=7),
             'player/jump': Animation(load_images('entities/player/jump')),
             'player/wall_slide': Animation(load_images('entities/player/wall_slide'), img_dur=12),
+            'player/strike': Animation(load_images('entities/player/strike'), img_dur=3)
         } # в папке из load images должны быть только png с int-именами.
 
         self.movement = [False, False]
@@ -69,6 +70,8 @@ class Game:
                     if event.key == pg.K_UP:  
                         self.player.jump()
                         # сделали стартовую точку ускорению чтобы прыжок был плавным.
+                    if event.key == pg.K_SPACE:
+                        self.player.strike()
                 if event.type == pg.KEYUP: # Если какая-нить клавиша опущена
                     if event.key == pg.K_LEFT:
                         self.movement[0] = False
@@ -78,7 +81,7 @@ class Game:
             self.screen.blit(pg.transform.scale(self.display, self.screen.get_size()), (0, 0)) 
             # Делаем так чтобы маленькая область растянулась на весь экран и от этого текстурки стали больше.
             pg.display.update() # обновляем экран чтобы видеть изменения
-            self.clock.tick(70) # устанавливаем фреймрэйт в 60 кадров/c
+            self.clock.tick(70)
 
 
 Game().run()
