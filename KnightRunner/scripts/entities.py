@@ -124,10 +124,10 @@ class Player(EntityPhysx):
         if self.striking < 0:
             self.striking = min(0, self.striking + 1)
         if abs(self.striking) > 58:
-            self.velocity[0] = abs(self.striking) / self.striking * 1.8
+            self.velocity[0] = abs(self.striking) / self.striking * 2
                                # Это примет значение 1 или -1, т.е. просто даёт нам направление
             if abs(self.striking) == 56:
-                self.velocity[0] *= 0.01 # Затормаживаемся после удара в движении
+                self.velocity[0] *= 0.1 # Затормаживаемся после удара в движении
               # Оставшиеся 56 кадров после удара у нас служат в качестве отката удара
     
 
