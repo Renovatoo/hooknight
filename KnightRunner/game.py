@@ -32,7 +32,7 @@ class Game:
             'player/run': Animation(load_images('entities/player/run'), img_dur=7),
             'player/jump': Animation(load_images('entities/player/jump')),
             'player/wall_slide': Animation(load_images('entities/player/wall_slide'), img_dur=12),
-            'particle/strike': Animation(load_images('particles/strike'), img_dur=5, loop=False),
+            'particle/strike': Animation(load_images('particles/strike'), img_dur=8, loop=False),
         } # в папке из load images должны быть только png с int-именами.
 
         self.movement = [False, False]

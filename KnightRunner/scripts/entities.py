@@ -126,11 +126,11 @@ class Player(EntityPhysx):
         if self.striking < 0:
             self.striking = min(0, self.striking + 1)
         if abs(self.striking) > 50:
-            self.velocity[0] = abs(self.striking) / self.striking * 2.5
+            self.velocity[0] = abs(self.striking) / self.striking * 3.2
             if abs(self.striking) == 51:
                 self.velocity[0] *= 0.1 # Резко затормаживаем игрока
                 # оставшиеся 51 фрейм нам нужен также для отката атаки
-            pvelocity = [abs(self.striking) / self.striking * 1.1, 0]
+            pvelocity = [abs(self.striking) / self.striking * 0.3, 0]
             self.game.particles.append(Particle(self.game, 'strike', self.rect().center, velocity=pvelocity, frame=4))
     
 
