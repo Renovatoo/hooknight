@@ -32,11 +32,11 @@ class Game:
             'player/run': Animation(load_images('entities/player/run'), img_dur=7),
             'player/jump': Animation(load_images('entities/player/jump')),
             'player/wall_slide': Animation(load_images('entities/player/wall_slide'), img_dur=12),
-            'player/strike': Animation(load_images('entities/player/strike'), img_dur=3)
+            'player/strike': Animation(load_images('entities/player/strike'), img_dur=6)
         } # в папке из load images должны быть только png с int-именами.
 
         self.movement = [False, False]
-        self.player = Player(self, (50, 50), (15, 15))
+        self.player = Player(self, (50, 50), (16, 16))
         self.tilemap = Tilemap(self, tile_size=16)
         self.tilemap.load('level1.json')
         self.scroll = [0, 0] # scroll будет относительно экрана, т.е. это реализует камеру
