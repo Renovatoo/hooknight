@@ -23,16 +23,16 @@ class Game:
         self.assets = { # создаём shortcuts для разных типов тайлов
             'player': load_image('entities/player/player.png'),
             'enemies': load_images('entities/enemies'),
-            'grass': load_images('grass'),
-            'blocks': load_images('blocks'),
-            'tree': load_images('tree'),
-            'misc': load_images('misc'),
+            'grass': load_images('tiles/grass'),
+            'blocks': load_images('tiles/blocks'),
+            'tree': load_images('tiles/tree'),
+            'misc': load_images('tiles/misc'),
             'background': load_image('background.png'),
             'player/idle': Animation(load_images('entities/player/idle'), img_dur=45),
             'player/run': Animation(load_images('entities/player/run'), img_dur=7),
             'player/jump': Animation(load_images('entities/player/jump')),
             'player/wall_slide': Animation(load_images('entities/player/wall_slide'), img_dur=12),
-            'player/strike': Animation(load_images('entities/player/strike'), img_dur=6)
+            'particle/strike': Animation(load_images('particles/strike'), img_dur=5, loop=False),
         } # в папке из load images должны быть только png с int-именами.
 
         self.movement = [False, False]
@@ -40,6 +40,7 @@ class Game:
         self.tilemap = Tilemap(self, tile_size=16)
         self.tilemap.load('level1.json')
         self.scroll = [0, 0] # scroll будет относительно экрана, т.е. это реализует камеру
+        self.particles = []
 
 
     def run(self):
@@ -55,6 +56,12 @@ class Game:
             self.player.update(self.tilemap, (self.movement[1] - self.movement[0], 0)) # изменения по X и Y осям
             self.player.render(self.display, offset=render_scroll) 
             # добавили параметры сдвига (offset) чтобы использовать это для камеры, обновлять видимые тайлы
+
+            for particle in self.particles.copy():
+                kill = particle.update()
+                particle.render(self.display, offset=render_scroll)
+                if kill:
+                    self.particles.remove(particle)
 
             for event in pg.event.get(): 
                 if event.type == pg.QUIT:

@@ -1,4 +1,5 @@
 import pygame as pg
+from scripts.particle import Particle
 
 class EntityPhysx: # класс который будет отвечать за фмзику мобов и игрока
     def __init__(self, game, e_type, pos, size):
@@ -11,6 +12,7 @@ class EntityPhysx: # класс который будет отвечать за 
         # это изначальные статусы collision чтобы сбрасывать ускорение свободного падения
 
         self.action = ''
+        self.anim_offset = (-3, -3)
         self.flip = False
         self.set_action('idle')
 
@@ -123,12 +125,13 @@ class Player(EntityPhysx):
             self.striking = max(0, self.striking - 1)
         if self.striking < 0:
             self.striking = min(0, self.striking + 1)
-        if abs(self.striking) > 58:
-            self.velocity[0] = abs(self.striking) / self.striking * 2
-                               # Это примет значение 1 или -1, т.е. просто даёт нам направление
-            if abs(self.striking) == 56:
-                self.velocity[0] *= 0.1 # Затормаживаемся после удара в движении
-              # Оставшиеся 56 кадров после удара у нас служат в качестве отката удара
+        if abs(self.striking) > 50:
+            self.velocity[0] = abs(self.striking) / self.striking * 2.5
+            if abs(self.striking) == 51:
+                self.velocity[0] *= 0.1 # Резко затормаживаем игрока
+                # оставшиеся 51 фрейм нам нужен также для отката атаки
+            pvelocity = [abs(self.striking) / self.striking * 1.1, 0]
+            self.game.particles.append(Particle(self.game, 'strike', self.rect().center, velocity=pvelocity, frame=4))
     
 
     def jump(self):
