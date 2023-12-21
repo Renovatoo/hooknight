@@ -42,6 +42,12 @@ class Game:
         self.scroll = [0, 0] # scroll будет относительно экрана, т.е. это реализует камеру
         self.particles = []
 
+        for spawner in self.tilemap.extract([('spawners', 0), ('spawners', 1)]):
+            if spawner['variant'] == 0:
+                self.player.pos = spawner['pos']
+            else:
+                print(spawner['pos'], 'enemy')
+
 
     def run(self):
         while True: # бесконечный цикл чтобы игра не закрывалась
