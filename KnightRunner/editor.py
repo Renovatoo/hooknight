@@ -139,6 +139,6 @@ class Editor:
             
             self.screen.blit(pg.transform.scale(self.display, self.screen.get_size()), (0, 0))
             pg.display.update()
-            self.clock.tick(60)
+            self.clock.tick(100)
 
 Editor().run()

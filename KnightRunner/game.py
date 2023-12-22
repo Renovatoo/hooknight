@@ -38,7 +38,7 @@ class Game:
         self.movement = [False, False]
         self.player = Player(self, (50, 50), (16, 16))
         self.tilemap = Tilemap(self, tile_size=16)
-        self.tilemap.load('level1.json')
+        self.tilemap.load('map.json')
         self.scroll = [0, 0] # scroll будет относительно экрана, т.е. это реализует камеру
         self.particles = []
 
