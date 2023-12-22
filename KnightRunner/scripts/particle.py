@@ -7,6 +7,7 @@ class Particle:
         self.animation = self.game.assets['particle/' + p_type].copy()
         self.animation.frame = frame
     
+
     def update(self):
         kill = False
         if self.animation.done:
@@ -18,6 +19,7 @@ class Particle:
         self.animation.update()
             
         return kill
+    
     
     def render(self, surf, offset=(0, 0)):
         img = self.animation.img()

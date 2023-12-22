@@ -1,6 +1,6 @@
 import pygame as pg
 import sys
-from scripts.entities import EntityPhysx, Player
+from scripts.entities import EntityPhysx, Player, Enemy
 from scripts.utilities import load_image, load_images, Animation
 from scripts.tilemap import Tilemap
 
@@ -22,7 +22,6 @@ class Game:
 
         self.assets = { # создаём shortcuts для разных типов тайлов
             'player': load_image('entities/player/player.png'),
-            'enemies': load_images('entities/enemies'),
             'grass': load_images('tiles/grass'),
             'blocks': load_images('tiles/blocks'),
             'tree': load_images('tiles/tree'),
@@ -32,6 +31,8 @@ class Game:
             'player/run': Animation(load_images('entities/player/run'), img_dur=7),
             'player/jump': Animation(load_images('entities/player/jump')),
             'player/wall_slide': Animation(load_images('entities/player/wall_slide'), img_dur=12),
+            'mage/idle': Animation(load_images('entities/enemies/mage/idle'), img_dur=45),
+            'mage/run': Animation(load_images('entities/enemies/mage/run'), img_dur=7),
             'particle/strike': Animation(load_images('particles/strike'), img_dur=8, loop=False),
         } # в папке из load images должны быть только png с int-именами.
 
@@ -41,13 +42,15 @@ class Game:
         self.tilemap.load('map.json')
         self.scroll = [0, 0] # scroll будет относительно экрана, т.е. это реализует камеру
         self.particles = []
+        self.enemies = []
 
         for spawner in self.tilemap.extract([('spawners', 0), ('spawners', 1)]):
             if spawner['variant'] == 0:
                 self.player.pos = spawner['pos']
             else:
-                print(spawner['pos'], 'enemy')
+                self.enemies.append(Enemy(self, spawner['pos'], (16, 16)))
 
+        
 
     def run(self):
         while True: # бесконечный цикл чтобы игра не закрывалась
@@ -62,6 +65,10 @@ class Game:
             self.player.update(self.tilemap, (self.movement[1] - self.movement[0], 0)) # изменения по X и Y осям
             self.player.render(self.display, offset=render_scroll) 
             # добавили параметры сдвига (offset) чтобы использовать это для камеры, обновлять видимые тайлы
+
+            for enemy in self.enemies.copy():
+                enemy.update(self.tilemap, (0, 0))
+                enemy.render(self.display, offset=render_scroll)
 
             for particle in self.particles.copy():
                 kill = particle.update()

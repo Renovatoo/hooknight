@@ -22,6 +22,7 @@ class Editor:
             'blocks': load_images('tiles/blocks'),
             'tree': load_images('tiles/tree'),
             'misc': load_images('tiles/misc'),
+            'spawners': load_images('tiles/spawners'),
         }
         
         self.movement = [False, False, False, False]

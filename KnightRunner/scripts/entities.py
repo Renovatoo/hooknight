@@ -1,4 +1,5 @@
 import pygame as pg
+import random
 from scripts.particle import Particle
 
 class EntityPhysx: # класс который будет отвечать за фмзику мобов и игрока
@@ -159,3 +160,23 @@ class Player(EntityPhysx):
                 self.striking = -60
             else:
                 self.striking = 60
+
+
+class Enemy(EntityPhysx):
+    def __init__(self, game, pos, size):
+        super().__init__(game, 'mage', pos, size)
+        self.walking = 0
+
+
+    def update(self, tilemap, movement=(0, 0)):
+        if self.walking:
+            if tilemap.solid_check((self.rect().centerx + (-14 if self.flip else 14), self.pos[1] + 17)):
+                movement = (movement[0] - 0.5 if self.flip else 0.5, movement[1])
+            else:
+                self.flip = not self.flip
+            self.walking = max(0, self.walking - 1)
+
+        elif random.random() < 0.012: # Выбираем рандомное время для передвижения
+            self.walking = random.randint(30, 120)
+
+        super().update(tilemap, movement=movement)
