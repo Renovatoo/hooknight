@@ -25,9 +25,13 @@ class Game:
         self.assets = { # создаём shortcuts для разных типов тайлов
             'player': load_image('entities/player/player.png'),
             'grass': load_images('tiles/grass'),
+            'grass_2': load_images('tiles/grass_2'),
             'blocks': load_images('tiles/blocks'),
+            'blocks_2': load_images('tiles/blocks_2'),
             'tree': load_images('tiles/tree'),
+            'tree_2': load_images('tiles/tree_2'),
             'misc': load_images('tiles/misc'),
+            'misc_2': load_images('tiles/misc_2'),
             'background': load_image('background.png'),
             'player/idle': Animation(load_images('entities/player/idle'), img_dur=45),
             'player/run': Animation(load_images('entities/player/run'), img_dur=7),

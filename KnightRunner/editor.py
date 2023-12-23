@@ -19,9 +19,13 @@ class Editor:
 
         self.assets = {
             'grass': load_images('tiles/grass'),
+            'grass_2': load_images('tiles/grass_2'),
             'blocks': load_images('tiles/blocks'),
+            'blocks_2': load_images('tiles/blocks_2'),
             'tree': load_images('tiles/tree'),
+            'tree_2': load_images('tiles/tree_2'),
             'misc': load_images('tiles/misc'),
+            'misc_2': load_images('tiles/misc_2'),
             'spawners': load_images('tiles/spawners'),
         }
         

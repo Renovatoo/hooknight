@@ -38,7 +38,7 @@ class EntityPhysx: # класс который будет отвечать за 
 
         self.pos[0] += frame_movement[0]
         entity_rect = self.rect()
-        # Дальше происходит магия...    
+            
         for rect in tilemap.physics_rects_around(self.pos):
             if entity_rect.colliderect(rect):
                 if frame_movement[0] > 0: # если движешься вправо
