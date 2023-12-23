@@ -1,6 +1,7 @@
 import pygame as pg
-import random
+import random, math
 from scripts.particle import Particle
+from scripts.spark import Spark
 
 class EntityPhysx: # класс который будет отвечать за фмзику мобов и игрока
     def __init__(self, game, e_type, pos, size):
@@ -95,6 +96,10 @@ class Player(EntityPhysx):
         super().update(tilemap, movement=movement)
 
         self.air_time += 1
+
+        if self.air_time > 170:
+            self.game.dead += 1
+
         if self.collisions['down']:
             self.air_time = 0
             self.jumps = 1
@@ -127,7 +132,7 @@ class Player(EntityPhysx):
         if self.striking < 0:
             self.striking = min(0, self.striking + 1)
         if abs(self.striking) > 50:
-            self.velocity[0] = abs(self.striking) / self.striking * 3.2
+            self.velocity[0] = abs(self.striking) / self.striking * 3.5
             if abs(self.striking) == 51:
                 self.velocity[0] *= 0.1 # Резко затормаживаем игрока
                 # оставшиеся 51 фрейм нам нужен также для отката атаки
@@ -170,13 +175,48 @@ class Enemy(EntityPhysx):
 
     def update(self, tilemap, movement=(0, 0)):
         if self.walking:
-            if tilemap.solid_check((self.rect().centerx + (-14 if self.flip else 14), self.pos[1] + 17)):
+            if tilemap.solid_check((self.rect().centerx + (-10 if self.flip else 10), self.pos[1] + 23)):
+                if (self.collisions['right'] or self.collisions['left']):
+                    self.flip = not self.flip
                 movement = (movement[0] - 0.5 if self.flip else 0.5, movement[1])
             else:
                 self.flip = not self.flip
             self.walking = max(0, self.walking - 1)
+            if not self.walking:
+                distance = (self.game.player.pos[0] - self.pos[0], self.game.player.pos[1] - self.pos[1])
+                if abs(distance[1] < 16):
+                    if (self.flip and distance[0] < 0): # еслм игрок слева и он смотрит влево
+                        self.game.projectiles.append([[self.rect().centerx - 7, self.rect().centery], -1.7, 0])
+                        for i in range(4):
+                            self.game.sparks.append(Spark(self.game.projectiles[-1][0], random.random() - 0.5 + math.pi, 2 + random.random()))
+                    if (not self.flip and distance[0] > 0): # если игрок справа и он смотрит вправо
+                        self.game.projectiles.append([[self.rect().centerx + 7, self.rect().centery], 1.7, 0])
+                        for i in range(4):
+                            self.game.sparks.append(Spark(self.game.projectiles[-1][0], random.random() - 0.5, 2 + random.random()))
 
-        elif random.random() < 0.012: # Выбираем рандомное время для передвижения
+        elif random.random() < 0.01: # Выбираем рандомное время для передвижения
             self.walking = random.randint(30, 120)
 
         super().update(tilemap, movement=movement)
+
+        if movement[0] != 0:
+            self.set_action('run')
+        else:
+            self.set_action('idle')
+
+        if abs(self.game.player.striking) >= 50:
+            if self.rect().colliderect(self.game.player.rect()):
+                for i in range(20):
+                    angle = random.random() * math.pi * 2
+                    speed = random.random() * 5
+                    self.game.sparks.append(Spark(self.rect().center, angle, 2 + random.random()))
+                    self.game.particles.append(Particle(self.game, 'enemy_kill', self.game.player.rect().center, velocity=[math.cos(angle + math.pi) * speed * 0.5, math.sin(angle + math.pi) * speed * 0.5], frame=random.randint(0, 4)))
+                return True
+
+    
+    def render(self, surf, offset=(0, 0)):
+        super().render(surf, offset=offset)
+        if self.flip:
+            surf.blit(pg.transform.flip(self.game.assets['wand'], True, False), (self.rect().centerx - 4 - self.game.assets['wand'].get_width() - offset[0], self.rect().centery - 3 - offset[1]))
+        else:
+            surf.blit(self.game.assets['wand'], (self.rect().centerx + 4 - offset[0], self.rect().centery - 3 - offset[1]))
