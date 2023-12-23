@@ -75,7 +75,7 @@ class Game:
             self.display.blit(self.assets['background'], (0, 0))
 
             if self.dead:
-                self.dead += 1 # Это запускает таймер со смерти игрока - 40 кадров
+                self.dead += 1 # Это запускает таймер со смерти игрока - 60 кадров
                 if self.dead > 60:
                     self.load_level(0)
 
