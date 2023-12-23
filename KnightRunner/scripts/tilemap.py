@@ -3,7 +3,7 @@ import json
 
 NEIGHBOR_OFFSETS = [(-1, 0), (-1, -1), (0, -1), (1, -1), (1, 0), (0, 0), (-1, 1), (0, 1), (1, 1)]
 # Это нужно для проверки collision (проверки 9-ти позиций, вокруг игрока и в самом игроке)
-PHYSICS_TILES = {'grass', 'grass_2', 'blocks', 'blocks_2', 'tree', 'tree_2'}
+PHYSICS_TILES = {'grass', 'blocks', 'tree'}
 # типы тайлов на которые мы распространим физику.
 
 class Tilemap:
